@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0056)https://www.grc.nasa.gov/WWW/k-12/airplane/reynolds.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Reynolds Number</title>
+
+<meta name="keywords" content="air, air properties, atmosphere, gas properties,
+viscosity, Reynold&#39;s number, similarity parameters">
+<link href="./Reynolds Number_files/portal.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="./Reynolds Number_files/jquery-ui.css">
+<link rel="stylesheet" href="./Reynolds Number_files/simpar.css" type="text/css">
+  <script async="" src="./Reynolds Number_files/analytics.js.下载"></script><script src="./Reynolds Number_files/jquery.min.js.下载" deter=""></script>
+  <script src="./Reynolds Number_files/jquery-ui.min.js.下载" deter=""></script>
+  <script src="./Reynolds Number_files/simpar.js.下载" type="text/javascript" deter=""></script>
+</head>
+<body bgcolor="#000000">
+<table width="730" border="0" align="center" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
+  <tbody><tr>
+    <td>
+<!-- Header Begins-->
+	<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tbody><tr>
+            <td width="365" height="68" bgcolor="#CCCCCC">
+              
+</td>
+<td width="20" height="68" bgcolor="#CCCCCC"></td>
+           <td width="170" height="68" align="left" valign="middle" bgcolor="#CCCCCC">
+<p>
+<font color="#333333" size="-2" face="Verdana, Arial, Helvetica, sans-serif">
+<a class="bodygray" href="https://gdofficial.github.io/inde.html">+             回到本网站首页</a>
+<br>
+<a class="bodygray" href="https://gdofficial.github.io/inde.html">+             注意：勿点下方链接！</a>
+
+</font>
+</p>
+</td>
+<td width="175" height="68" bgcolor="#006699"><table cellpadding="0" cellspacing="0" border="0">
+
+<td rowspan="2" width="20"></td><td colspan="3"><label for="searchfield">
+</td>
+</tr><tr>
+</td>
+</td></tr>
+</tbody></table>
+</td>
+</tr>
+ <tr>
+<td colspan="4"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+               <tbody><tr align="center">
+     <td><a href="http://www.nasa.gov/about/highlights/index.html">
+           <img src="./Reynolds Number_files/nav_top_0_0.gif" alt="ABOUT NASA" height="25" width="123" border="0" align="bottom"></a>
+     </td>
+     <td><a href="http://www.nasa.gov/news/highlights/index.html">
+           <img src="./Reynolds Number_files/nav_top_1_0.gif" alt="NEWS AND EVENTS" height="25" width="140" border="0" align="bottom"></a>
+     </td>
+     <td><a href="http://www.nasa.gov/multimedia/highlights/index.html">
+           <img src="./Reynolds Number_files/nav_top_2_0.gif" alt="MULTIMEDIA" height="25" width="119" border="0" align="bottom"></a>
+     </td>
+     <td><a href="http://www.nasa.gov/missions/highlights/index.html">
+           <img src="./Reynolds Number_files/nav_top_3_0.gif" alt="MISSIONS" height="25" width="106" border="0" align="bottom"></a>
+     </td>
+     <td><a href="http://mynasa.nasa.gov/portal/site/mynasa/index.jsp?bandwidth=high">
+           <img src="./Reynolds Number_files/nav_top_4_0.gif" alt="MyNASA" height="25" width="101" border="0" align="bottom"></a>
+     </td>
+     <td><a href="http://www.nasa.gov/about/career/index.html">
+           <img src="./Reynolds Number_files/nav_top_5_0.gif" alt="WORK FOR NASA" height="25" width="141" border="0" align="bottom"></a>
+     </td>
+        </tr>
+            </tbody></table></td>
+        </tr>         <tr>            <td colspan="4">  <!-- Header Ends -->			  			<table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">               <tbody><tr>                  <td>
+<center>
+<img src="./Reynolds Number_files/reynolds.gif" alt="A graphic showing the derivation of the Reynolds.
+ Reynolds number equals the ratio of inertia to viscous forces." width="710" height="532" align="bottom">
+</center>
+
+<font size="2" face="Arial, Helvetica, sans-serif">
+<p>我是姜尧耕，又见面啦: )
+  
+</p>
+<p>
+     鉴于最近大家有学到空气阻力部分计算雷诺数的需要，我就把只能fq看的此nasa英文网站作了一个简单的翻译，部署到国内服务器上供大家使用。若有其他需求，可随时
+<a href="https://gdofficial.github.io/contact.html">联系我</a>
+<br>
+<br>
+
+粘度的重要相似参数是雷诺数。 雷诺数表示惯性力(抵抗变化或运动)与粘性力的比率。 根据动量守恒方程的详细分析，惯性力的特征是密度r乘以速度V乘以速度的梯度dV/dx。 雷诺数Re为:  
+</p>
+<center>
+<p>
+Re = (r * V * dV/dx) / (mu * d^2V/dx^2)
+</p>
+</center>
+<p>
+  速度的梯度与速度除以长度标尺l成正比。同样，速度的二阶导数与速度除以长度标尺的平方成正比。 于是：
+</p>
+<center>
+<p>
+Re = (r * V * V/L) / (mu * V / L^2)
+</p>
+<p>
+Re = (r * V * L) / mu
+</p>
+</center>
+<p>
+  雷诺数是无量纲的常数（其实是不是常数也不一定）。 这玩的值如果很高的话(在1000万的数量级上)表明粘性力很小，流动本质上是无粘的。 然后可以用欧拉方程来模拟流动。 100量级以下则必须考虑粘滞力。  
+</p>
+<p>
+  雷诺数可以进一步简化，用运动粘度等于动力粘度除以密度即可算出:  
+</p>
+<center>
+<p>
+nu = mu / r
+</p>
+<p>
+Re =  V * L / nu
+</p>
+</center>
+
+<center>
+
+  <!-- content-wrapper -->
+  <div id="content-wrapper">
+    <!-- header -->
+      <header>
+        <h1>相似参数的计算器</h1>
+      </header>
+    <!-- header -->
+      <!-- container -->
+        <div id="container">
+      <div class="widget">
+        <div id="list">
+          <label for="unit">单位：</label>
+            <select class="check" name="unit" id="unit" style="cursor: pointer;">
+              <option value="0">外国人瞎搞的单位</option>
+              <option value="1">国际制</option>
+            </select>
+            <label for="planet">地界儿：</label>
+              <select name="planet" id="planet" style="cursor: pointer;">
+                <option value="0">咱脚底下</option>
+                <option value="1">火星</option>
+              </select>
+            <label for="input1">海拔</label>
+            <label for="input3">多长</label>
+          <div id="spM">
+            <label for="selection2"></label>
+              <select name="selection2" id="selection2" style="cursor: pointer;">
+                <option value="0">Speed</option>
+                <option value="1">Mach</option>
+              </select>
+          </div>
+        </div>
+      </div>
+        <button id="Calculation" style="cursor: pointer" class="ui-button ui-corner-all ui-widget">算他算他一定要算他</button>
+    </div>
+      <!-- container -->
+    <!-- userInput0 -->
+    <p id="note">输入数据</p>
+      <div id="allInputs">
+      <div id="inputTitle"></div>
+        <div id="userInput1">
+          <input name="input1" id="input1">
+        </div>
+        <div id="userInput2">
+          <input name="input2" id="input2">
+        </div>
+        <div id="userInput3">
+          <input name="input3" id="input3">
+        </div>
+
+        <div id="input1Unit">feet</div>
+        <div id="input2Unit">mph</div>
+        <div id="input3Unit">feet</div>
+    </div>
+    <!-- userInput0 -->
+      <!-- output -->
+        <div id="output">
+      <div id="outputTitle">输出在这</div>
+      <div id="outSection1">Speed/Mach Number</div>
+      <div id="outputSpeed">速度</div>
+      <div id="outputSoS">音速（当地的）</div>
+      <div id="outputDyn">动压（当地的）</div>
+      <div id="outputMach">Mach #</div>
+      <div id="outSection2">Compressibility</div>
+      <div id="outputPs">P 静态</div>
+      <div id="outputPt">P Σ</div>
+      <div id="outputTs">T 静态</div>
+      <div id="outputTt">T Σ</div>
+      <div id="outSection3">Viscosity</div>
+      <div id="outputDen">密度</div>
+      <div id="outputDynV">Dynamic Coef.</div>
+      <div id="outputKinV">Kinematic Coef.</div>
+      <div id="outputReynold">Reynold's #</div>
+      <div id="output1">500.000 mph</div>
+      <div id="output2">761.105 mph</div>
+      <div id="output3">639 psf</div>
+      <div id="output4">0.657</div>
+      <div id="output5">2116 psf</div>
+      <div id="output6">2827 psf</div>
+      <div id="output7">518 R</div>
+      <div id="output8">563 R</div>
+      <div id="output9">0.00238 slug/ft^3</div>
+      <div id="output10">3.62e-7 lb-s/ft^2</div>
+      <div id="output11">1.5227e-4 ft^2/s</div>
+      <div id="output12">48161989</div>
+      <div id="out1Unit"></div>
+      <div id="out2Unit"></div>
+      <div id="out3Unit"></div>
+      <div id="out5Unit"></div>
+      <div id="out6Unit"></div>
+      <div id="out7Unit"></div>
+      <div id="out8Unit"></div>
+      <div id="out9Unit"></div>
+      <div id="out10Unit"></div>
+      <div id="out11Unit"></div>
+    </div>
+      <!-- output -->
+  </div>
+  <!-- content-wrapper -->
+  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+<noscript>
+<p>
+This page shows an interactive Java applet which calculates the viscosity coefficient
+and the Reynolds number for an input velocity, length, and altitude.
+</p>
+</noscript>
+</center>
+<p></p>
+<p>
+这里面本来是一个离线应用的下载处，不过和上面的功能差不多，就不再展示了。</p> <p>
+
+  对于一些问题，我们可以用长度比例尺除以雷诺数来得到每英尺Ref的雷诺数。由下式给出:  
+</p>
+<center>
+<p>
+Ref =  V / nu
+</p>
+</center>
+<p>
+  每英尺(或每米)的雷诺数显然不是像雷诺数那样的无量纲数。 你可以通过指定长度比例为1英尺，使用计算器来确定每英尺的雷诺数。  
+</p>
+<hr>
+<b>今天就翻译到这了，同志们再见。</b>
+<br>
+
+
+
+                <td align="right" valign="top"><img src="./Reynolds Number_files/logo_nasa_self.gif" alt="NASA Logo" width="49" height="48">&nbsp;&nbsp;&nbsp;</td>
+<!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+<script async="" type="text/javascript" src="./Reynolds Number_files/Universal-Federated-Analytics-Min.js.下载" id="_fed_an_ua_tag"></script>
+
+                                 </tr>             </tbody></table></td>         </tr>       </tbody></table></td>   </tr> </tbody></table>  <!-- Footer Ends -->   
+</body></html>
