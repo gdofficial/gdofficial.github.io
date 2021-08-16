@@ -1,0 +1,394 @@
+header {
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+}
+h1 {
+  position; absolute;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  font-weight: normal;
+}
+#container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+#content-wrapper {
+  position: absolute;
+  align-self: center;
+  width: 500px;
+  height: 300px;
+  right: 46%;
+}
+select {
+  width: 25%;
+  font-size: 10px;
+  z-index: 1;
+}
+#unit {
+  position: absolute;
+  left: 55%;
+  top: 10%;
+}
+.widget {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+#planet {
+  position: absolute;
+  left: 55%;
+  top: 17%;
+}
+#note{
+  color: red;
+  position: absolute;
+  left: 30%;
+  top: 21%;
+}
+label[for="unit"]{
+  position: absolute;
+  left: 49%;
+  font-size: 11px;
+  top: 11%;
+}
+label[for="planet"]{
+  position: absolute;
+  font-size: 11px;
+  left: 48%;
+  top: 17%;
+}
+label[for="input1"]{
+  position: absolute;
+  left: 46%;
+  top: 36%;
+}
+label[for="input3"]{
+  position: absolute;
+  left: 46%;
+  top: 55%;
+}
+#selection2 {
+  position: absolute;
+  color: black;
+  left: 29%;
+  top: 45%;
+}
+
+#input1Unit,
+#input2Unit,
+#input3Unit {
+  position: relative;
+  color: black;
+  width: 80px;
+}
+#input1Unit {
+  position: absolute;
+  left: 87%;
+  top: 29%;
+}
+#input2Unit {
+  position: absolute;
+  top: 40.5%;
+  left: 87%;
+}
+#input1,
+#input2,
+#input3 {
+  position: absolute;
+  width: 97%;
+  height: 15px;
+  z-index: 1;
+}
+
+#userInput0 {
+  position: absolute;
+  font-size: 10px;
+}
+#userInput1 {
+  position: absolute;
+  width: 25%;
+  height: 12%;
+  left: 63%;
+  top: 36%;
+}
+#userInput2 {
+  position: absolute;
+  width: 25%;
+  height: 12%;
+  left: 63%;
+  top: 45%;
+
+}
+#userInput3 {
+  position: absolute;
+  width: 25%;
+  height: 12%;
+  left: 63%;
+  top: 55%;
+
+}
+#input1Unit{
+  position: absolute;
+  left: 96%;
+  top: 36%;
+}
+#input2Unit{
+  position: absolute;
+  left: 96%;
+  top: 45%;
+}
+#input3Unit{
+  position: absolute;
+  left: 96%;
+  top: 55%;
+}
+
+#inputTitle {
+  position: absolute;
+  color: red;
+  top: 23%;
+  left: 30%;
+}
+#output {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+#outputTitle,
+#outSection1,
+#outSection2,
+#outSection3 {
+  position: absolute;
+  color: blue;
+}
+
+#outputTitle {
+  left: 30%;
+  top: 80%;
+}
+
+#Calculation {
+  color: white;
+  background: red;
+  font-size: 10px;
+  width: 25%;
+  height: 10%;
+  left: 55%;
+  top: 70%;
+  position: absolute;
+  z-index: 1;
+}
+#list{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+#spM {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+div{
+    white-space: nowrap;
+}
+
+#container{
+  left: 100px;
+}
+#note{
+  left: 300px;
+}
+
+
+#outputSpeed,
+#outputSoS,
+#outputDyn,
+#outputMach {
+  color: black;
+  position: absolute;
+}
+#outSection1{
+  top: 88%;
+  left: 22%;
+}
+
+#outputSpeed {
+  top: 97%;
+  left: 28%;
+}
+#outputSoS {
+  top: 107%;
+  left: 16%;
+}
+#outputDyn {
+  top: 117%;
+  left: 17%;
+}
+#outputMach {
+  top: 127%;
+  left: 26%;
+}
+
+#output1,
+#output2,
+#output3,
+#output4 {
+  background: black;
+  color: yellow;
+  width: 25%;
+  height: 20px;
+  position: absolute;
+  left: 37%;
+  text-align: left;
+}
+#output1 {
+  top: 97%;
+}
+#output2 {
+  top: 107%;
+}
+#output3 {
+  top: 117%;
+}
+#output4 {
+  top: 127%;
+  color: white;
+  background: blue;
+}
+
+#outputPs,
+#outputPt,
+#outputTs,
+#outputTt {
+  color: black;
+  position: absolute;
+  text-align: center;
+}
+#outSection2{
+  top: 88%;
+  left: 70%;
+}
+
+#outputPs {
+  top: 97%;
+  left: 70%;
+}
+#outputPt {
+  top: 107%;
+  left: 70%;
+}
+#outputTs {
+  top: 117%;
+  left: 69%;
+}
+#outputTt {
+  top: 127%;
+  left: 70%;
+}
+
+#output5,
+#output6,
+#output7,
+#output8 {
+  background: black;
+  color: yellow;
+  width: 25%;
+  height: 20px;
+  position: absolute;
+  left: 80%;
+  text-align: left;
+}
+#output5 {
+  top: 97%;
+}
+#output6 {
+  top: 107%;
+}
+#output7 {
+  top: 117%;
+}
+#output8 {
+  top: 127%;
+}
+
+#outputDen,
+#outputDynV,
+#outputKinV,
+#outputReynold {
+  color: black;
+  position: absolute;
+  text-align: center;
+}
+#outSection3{
+  top: 88%;
+  left: 121%;
+}
+
+#outputDen {
+  top: 97%;
+  left: 120%;
+}
+#outputDynV {
+  top: 107%;
+  left: 111%;
+}
+#outputKinV {
+  top: 117%;
+  left: 109%;
+}
+#outputReynold {
+  top: 127%;
+  left: 115%;
+}
+
+#output9,
+#output10,
+#output11,
+#output12 {
+  background: black;
+  color: yellow;
+  width: 25%;
+  height: 20px;
+  position: absolute;
+  left: 130%;
+  text-align: left;
+}
+#output9 {
+  top: 97%;
+}
+#output10 {
+  top: 107%;
+}
+#output11 {
+  top: 117%;
+}
+#output12 {
+  top: 127%;
+  color: white;
+  background: blue;
+}
+
+
+
+
+
+
+#output1Unit,
+#output2Unit {
+  position: absolute;
+  color: black;
+  font-size: 10px;
+  left: 87%;
+}
+#output1Unit {
+  top: 65%;
+}
+#output2Unit {
+  position: absolute;
+  top: 77%;
+}

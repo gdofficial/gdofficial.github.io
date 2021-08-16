@@ -1,0 +1,1068 @@
+"use strict";
+//=======================================================================================
+//
+//                          Similarity Parameter Calculator
+//
+//                Interactive Program to solve Standard Atmosphere Equations
+//                             for similarity parameter
+//
+//                          Original Java Applet Written By:
+//
+//                                    Tom Benson
+//                              NASA Glenn Research Center
+//
+//                          Converted to JavaScript App By:
+//
+//                                  Chima Ugonna
+//                      NASA Glenn Research Center Intern Spring 2018
+//                            Illinois Institute of Technology
+//
+//
+//                                      NOTICE
+//  ~>  This software is in the Public Domain.  It may be freely copied and used in
+//  ~>  non-commercial products, assuming proper credit to the author is given.  IT
+//  ~>  MAY NOT BE RESOLD.  If you want to use the software for commercial
+//  ~>  products, contact the author.
+//  ~>  No copyright is claimed in the United States under Title 17, U. S. Code.
+//  ~>  This software is provided "as is" without any warranty of any kind, either
+//  ~>  express, implied, or statutory, including, but not limited to, any warranty
+//  ~>  that the software will conform to specifications, any implied warranties of
+//  ~>  merchantability, fitness for a particular purpose, and freedom from
+//  ~>  infringement, and any warranty that the documentation will conform to the
+//  ~>  program, or any warranty that the software will be error free.
+//  ~>  In no event shall NASA be liable for any damages, including, but not
+//  ~>  limited to direct, indirect, special or consequential damages, arising out
+//  ~>  of, resulting from, or in any way connected with this software, whether or
+//  ~>  not based on warranty, contract, tort or otherwise, whether or not injury
+//  ~>  was sustained by persons or property or otherwise, and whether or not loss
+//  ~>  was sustained from, or arose out of the results of, or use of, the software
+//  ~>  or services provided hereunder.
+//
+//=======================================================================================
+
+//=======================================================================================
+// $jQuery$
+//=======================================================================================
+
+//=======================================================================================
+//declare global vars
+var unit, planet;
+var alt=0, vel=0, mach=0, len=0;
+var sos=0, q=0, ps=0, pt=0, ts=0, tt=0;
+var density=0, dcoef=0, kcoef=0, reynold=0;
+var spmach=0;
+var rgas = 1716, gamma=1.4;
+$(document).ready(function(){
+
+    // Making a selection from the drop down list will get a pointer for the cursor
+      $("selector, select").css( "cursor", "pointer");
+
+    // Initializing the button
+      $( "button" ).button();
+
+  var computation = function ( event ){
+    //  Checks user input first before running the computation
+      checkUserInput();
+      unit = $("#unit").val();
+      spmach = $("#selection2").val();
+      limits(); //set input limits
+      checkPlanet();  //check planet selection
+      getFlow();  //calculate values
+      getOutputs(); //display outputs
+  };
+
+  var checkUnit = function(){ //change values based on current unit
+    unit = $("#unit").val();
+    spmach = $("#selection2").val();  //speed or mach selection
+    alt = $("#input1").val(); //altitude input
+    len = $("#input3").val(); //length input
+
+    if(unit == 0){
+      if(spmach == 0){
+        vel = $("#input2").val();
+      }
+      if(spmach == 1){
+        mach = $("#input2").val();
+      }
+      //imperial values
+      var altimp = alt/0.3048;
+      var velimp = vel/0.447;
+      var lenimp = len/0.3048;
+      $("#input1").val(Math.floor(altimp));
+      if(spmach == 0){
+        $("#input2").val(velimp.toFixed(3));
+      }else{
+        $("#input2").val(parseFloat(mach).toFixed(3));
+      }
+      $("#input3").val(lenimp.toFixed(3));
+      $("#output1").html(velimp.toFixed(3));
+      $("#input1Unit").html("feet");
+      $("#input2Unit").html("mph");
+      $("#input3Unit").html("feet");
+    }else{  //set to metric
+      if(spmach == 0){
+        vel = $("#input2").val();
+      }
+      if(spmach == 1){
+        mach = $("#input2").val();
+
+      }
+      var altmet = alt*0.3048;
+      var velmet = vel*0.447;
+      var lenmet = len*0.3048;
+
+      $("#input1").val(Math.floor(altmet));
+      if(spmach == 0){
+        $("#input2").val(velmet.toFixed(3));
+      }else{
+        $("#input2").val(parseFloat(mach).toFixed(3));
+      }
+      $("#input3").val(lenmet.toFixed(3));
+      $("#output1").html(velmet.toFixed(3) + " m/sec");
+      $("#input1Unit").html("meters");
+      $("#input2Unit").html("m/sec");
+      $("#input3Unit").html("meters");
+    }
+  };
+
+  //set gas constant and gamma based on planet selection
+  var checkPlanet = function(){
+    planet = $("#planet").val();
+    if(planet == 0){
+      rgas = 1716;
+      gamma = 1.4;
+    }else{
+      rgas = 1149;
+      gamma = 1.29;
+    }
+  };
+
+  var getFlow = function(){
+    alt = $("#input1").val(); //get altitude
+    calcAll(alt); //calculate everything in one funciton
+  };
+
+
+
+  var calcAll = function(a){  //does all calculations given the altitude
+
+    if(unit == 1){
+      a = a/.3048;  //convert altitude to metric
+    }
+    if(planet == 0){  //Earth
+      if (a <= 36152){           // Troposphere
+           ts = 518.688 - 3.56 * a/1000;
+           ps = 2116 * Math.pow(ts/518.688, 5.256) ;
+      }else if (a >= 36152 && a <= 82345){   // Stratosphere
+           ts = 389.98;
+           ps = 2116 * 0.2236 * Math.exp((36152-a)/(53.35*389.98));
+      }else if (a >= 82345 && a <= 155348){
+           ts = 389.98 + 1.645 * (a-82345)/1000;
+           ps = 2116*0.02456 * Math.pow(ts/389.98,-11.388);
+      }
+    }else if(planet == 1){  //Mars
+      if (a <= 22960) {
+          ts = 434.02 - 0.548 * a/1000;
+          ps = 14.62 * Math.pow(2.71828,-.00003*a);
+       }else if (a > 22960) {
+          ts = 449.36 - 1.217 * a/1000;
+          ps = 14.62 * Math.pow(2.71828,-.00003*a);
+       }
+   }
+   density = ps/rgas/ts;  //density
+   sos = Math.sqrt(gamma*rgas*ts); //get speed of sound
+   sos = (sos*60)/88;
+   if(spmach == 0){ //speed or mach
+     vel = $("#input2").val();
+     if(unit == 1){
+       mach = (vel/.447)/sos; //get mach while in metric
+     }else{
+       mach = vel/sos;
+     }
+
+   }else if(spmach==1){
+     mach = $("#input2").val();
+     vel = mach*sos;  //get speed given mach
+   }
+   if(unit == 1){
+     vel = vel/0.447;
+   }
+   if(spmach == 0){
+     q = 0.5 * density * (vel*vel) / (0.6818*0.6818); //dynamic pressure
+   }else{
+     if(unit == 0){
+       q = 0.5 * density * ((vel)*(vel)) / (0.6818*0.6818); // imperial dynamic pressure
+     }else{
+       q = 0.5 * density * ((vel*.447)*(vel*.447)) / (0.6818*0.6818); //metric dynamic pressure
+     }
+
+   }
+   var trat = (1.0 + (0.5*(gamma-1.0)*mach*mach)); //t ratio
+   tt = ts*trat; //t total
+   pt = ps * Math.pow(trat, (gamma/(gamma-1.0))); //p total
+
+   dcoef = 0.000000362 * Math.pow(ts/518.7, 1.5) * ((518.7 + 198.72)/(ts+198.72));
+   //dcoef = (0.000000362*717.408)/((ts + 198.72)*Math.pow(ts/518.688,1.5)); //dynamic coef
+   kcoef = dcoef/density; //kinetic coef
+   len = $("#input3").val(); //input length
+
+   if(spmach == 0){
+     if(unit == 1){
+       reynold = (((vel)/0.6818) * (len/.3048) * density) / dcoef; //reynold's number given speed, converted from metric
+     }else{
+       reynold = (((vel)/0.6818) * len * density) / dcoef; //reynold's number given speed
+     }
+   }else{
+     if(unit == 1){
+       reynold = (((vel*.447)/0.6818) * (len/.3048) * density) / dcoef; //reynold's number given mach, converted from metric
+     }else{
+       reynold = (((vel)/0.6818) * len * density) / dcoef; //reynold's number given mach
+     }
+   }
+
+
+
+};
+
+var limits = function(){  //set limits fo inputs
+  var alim = $("#input1").val();  //get altitude
+  var smlim = $("#input2").val(); //get speed or mach
+  var lenlim = $("#input3").val();  //get length
+  spmach = $("#selection2").val();
+  if(unit == 0){  //limits for imperial units
+    if(alim > 150000) $("#input1").val(150000);
+    else if(alim < 0) $("#input1").val(0);
+
+    if(spmach == 0){
+      if(smlim > 17600) $("#input2").val(17600);
+      else if(smlim < 0) $("#input2").val(0);
+    }else if(spmach == 1){
+      if(smlim > 25) $("#input2").val(25);
+      else if(smlim < 0) $("#input2").val(0);
+    }
+
+    if(lenlim > 100) $("#input3").val(100);
+    else if(lenlim < 0) $("#input3").val(0);
+
+  }else if(unit == 1){  //limits for metric units
+    if(alim > 45700) $("#input1").val(45700);
+    else if(alim < 0) $("#input1").val(0);
+
+    if(spmach == 0){
+      if(smlim > 7867) $("#input2").val(7867);
+      else if(smlim < 0) $("#input2").val(0);
+    }else if(spmach == 1){
+      if(smlim > 25) $("#input2").val(25);
+      else if(smlim < 0) $("#input2").val(0);
+    }
+
+    if(lenlim > 30) $("#input3").val(30);
+    else if(lenlim < 0) $("#input3").val(0);
+  }
+};
+
+    var getOutputs = function( event ){ //displays outputs
+      //get all variables and fix them to appropriate decimal places
+      var vfix = parseFloat(vel).toFixed(3);
+      var sosfix = sos.toFixed(3);
+      var qfix = q.toFixed(5);
+      if(q >= 100){
+        qfix = Math.floor(q);
+      }
+      var mfix = parseFloat(mach).toFixed(3);
+      var psfix = Math.floor(ps);
+      var ptfix = Math.floor(pt);
+      var tsfix = Math.floor(ts);
+      var ttfix = Math.floor(tt);
+      var denfix = density.toFixed(5);
+      var dynfix = dcoef.toExponential(2);
+      var kinfix = kcoef.toExponential(4);
+      var renfix = Math.floor(reynold);
+      if(unit == 0){  //display value and imperial unit
+        $("#output1").html(vfix + " mph");
+        $("#output2").html(sosfix + " mph");
+        $("#output3").html(qfix + " psf");
+        $("#output4").html(mfix);
+        $("#output5").html(psfix + " psf");
+        $("#output6").html(ptfix + " psf");
+        $("#output7").html(tsfix + " R");
+        $("#output8").html(ttfix + " R");
+        $("#output9").html(denfix + " slug/ft^3");
+        $("#output10").html(dynfix + " lb-s/ft^2");
+        $("#output11").html(kinfix + " ft^2/s");
+        $("#output12").html(renfix);
+      }else if(unit == 1){  //convert to metric then display values with metric unit
+        var vmet = vel*.447;
+        var sosmet = sosfix*0.447;
+        var qmet = qfix*(4.448/.3048/.3048/1000);
+        var psmet = psfix*(4.448/.3048/.3048/1000);
+        var ptmet = ptfix*(4.448/.3048/.3048/1000);
+        var tsmet = tsfix*(.55555);
+        var ttmet = ttfix*(.55555);
+        var denmet = density*(515.4);
+        var dynmet = dynfix*(47.879);
+        var kinmet = kinfix/(10.7639);
+        if(spmach == 1){
+          $("#output1").html((vel*.447*.447).toFixed(3) + " m/sec");
+        }
+        $("#output1").html(vmet.toFixed(3) + " m/sec");
+        $("#output2").html(sosmet.toFixed(3) + " m/sec");
+        $("#output3").html(qmet.toFixed(3) + " kPa");
+        $("#output4").html(mfix);
+        $("#output5").html(psmet.toFixed(3) + " kPa");
+        $("#output6").html(ptmet.toFixed(3) + " kPa");
+        $("#output7").html(Math.ceil(tsmet) + " K");
+        $("#output8").html(Math.ceil(ttmet) + " K");
+        $("#output9").html(denmet.toFixed(5) + " kg/m^3");
+        $("#output10").html(dynmet.toExponential(4) + " N-s/m^2");
+        $("#output11").html(kinmet.toExponential(4) + " m^2/s");
+        $("#output12").html(renfix);
+      }
+    }
+
+
+    //  Default values in input fields when the program is first run
+      $("#input1").val( 0 );
+      $("#input2").val(500);
+      $("#input3").val(1.0);
+      $("#input1Unit").html("feet");
+      $("#input2Unit").html("mph");
+      $("#input3Unit").html("feet");
+
+    // computes on button click
+      $("button").on("click", computation );
+      //computes when planet is changed
+      $("select#planet").on("change", function(){
+        computation();
+      });
+
+      //calculates and displays speed or mach depending on selections
+      $("select#selection2").on("change", function(){
+        if($('#selection2').val() == 1){
+          $("#input2Unit").css("visibility", "hidden");
+        }else{
+          $("#input2Unit").css("visibility", "visible");
+        }
+        var inputTwo = $('#input2').val();
+        var spdmach = $('#selection2').val();
+        if(spdmach == 0){
+          unit = $("#unit").val();
+          if(unit == 0){
+            $('#input2').val(parseFloat(vel).toFixed(3));
+            $('#output1').html(parseFloat(vel).toFixed(3) + " mph");
+          }else{
+            var v = vel*.447*.447;
+            $('#input2').val(parseFloat(v).toFixed(3));
+            $('#output1').html(parseFloat(v).toFixed(3) + " m/sec");
+          }
+        }else{
+          $('#input2').val(mach.toFixed(3));
+          $('#output4').html(mach.toFixed(3));
+
+        }
+      });
+
+      //when change unit selection, checks unit and computes
+      $("select#unit").on("change", function(){
+        checkUnit();
+        computation();
+      });
+
+    //  The initial computation with the default values
+      computation();
+
+
+
+});
+//=======================================================================================
+//****************I don't think anything beyond this point is needed, but I kept it anyway, just in case*********************
+//=======================================================================================
+function checkUserInput (){
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //  +Description:
+  //            ~>  The checkUserInput function takes no parameters and determines whether the
+  //            ~>  values entered in the input fields are valid by utilizing the filterFloat
+  //            ~>  function and a conditional statement that will return boolean
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  var firstInput = document.getElementById('input1').value;
+  var secondInput = document.getElementById('input2').value;
+  var thirdInput = document.getElementById('input3').value;
+
+    return ( (!isNaN(filterFloat(firstInput))) && (!isNaN(filterFloat(secondInput))) && (!isNaN(filterFloat(thirdInput))) )  ? true : false;
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function filterFloat ( value ){
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //  +Description:
+  //            ~>  The filterFloat function takes 1 parameter and strictly parses the value
+  //            ~>  in question to determine whether it is a number.
+  //            ~>  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseFloat
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  return (/^(\-|\+)?([0-9]+(\.[0-9]+)?|Infinity)$/.test(value) ) ? Number(value) : NaN;
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function compute (){
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //  +Description:
+  //            ~>  The compute function takes no parameters and handles the process of
+  //            ~>  computation. It then sends the speed, mach, and speed of sound for output
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  var inputOne = document.getElementById('input1').value;
+  var inputTwo = document.getElementById('input2').value;
+  var unit = document.getElementById('unit');
+  var planet = document.getElementById('planet');
+  var altemp = document.getElementById('selection1');
+  var spdmach = document.getElementById('selection2');
+
+  var alt=0;
+  var tmp=0;
+  var speed = 0;
+  var mach = 0;
+  var sos = 0;
+
+  if(altemp.value == 0){
+    alt = checkAltitude(inputOne);
+    tmp = altitudeToTemperature(alt);
+
+  }else if(altemp.value == 1){
+    //inputOne.value = tmp;
+    tmp = checkTemperature(inputOne);
+  }
+  sos = setSpeedOfSound(tmp);
+  if(spdmach.value == 0){
+    speed = checkSpeed(inputTwo);
+    mach = speedToMach(speed, sos);
+    toString(speed, mach, sos);
+  }else if(spdmach.value == 1){
+    mach = checkMach(inputTwo);
+    speed = machToSpeed(mach, sos);
+    toString(mach, speed, sos);
+  }
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function numberFormat ( num ){
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //  +Description:
+  //            ~>  The numberFormat function takes 1 parameter and formats a variable to a
+  //            ~>  fixed decimal point range
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  return parseFloat(num).toFixed(3);
+};
+//=======================================================================================
+
+//=======================================================================================
+function toString( inputTwo, resultFromOtherVariable2, speedOfSound ){
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //  +Description:
+  //            ~>  The toString function takes 5 parameters and formats our variables to a
+  //            ~>  fixed decimal point range as well as convert them to a string. With this
+  //            ~>  string, we can send it to another function to display the results via
+  //            ~>  document.getElementById("element_id").innerHTML = string;
+  //            ~>  We need to have the boolean from the user selection in order to know what
+  //            ~>  the user entered. So if userChoice1 == 1, we can be sure the user entered
+  //            ~>  a temperature value in the first input box
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  var userChoice1 = userSelection1();
+  var userChoice2 = userSelection2();
+  var speedString = "";
+  var speedOfSoundString = "";
+  var machSring = "";
+
+  // Format output values
+      inputTwo = numberFormat( inputTwo );
+      resultFromOtherVariable2 = numberFormat( resultFromOtherVariable2 );
+      speedOfSound = Math.floor(speedOfSound); //numberFormat( speedOfSound );
+
+  if ( userChoice1 == 0 && userChoice2 == 0) {
+    inputTwo = Math.floor(inputTwo);
+    speedString += inputTwo;
+    machSring += resultFromOtherVariable2;
+  }
+
+  if ( userChoice1 == 0 && userChoice2 == 1 ) {
+    speedString += resultFromOtherVariable2;
+    machSring += inputTwo;
+  }
+
+  if ( userChoice1 == 1 && userChoice2 == 0 ) {
+    inputTwo = Math.floor(inputTwo);
+    speedString += inputTwo;
+    machSring += resultFromOtherVariable2;
+  }
+
+  if ( userChoice1 == 1 && userChoice2 == 1 ) {
+    speedString += resultFromOtherVariable2;
+    machSring += inputTwo;
+  }
+
+    speedOfSoundString += speedOfSound;
+      results ( speedString, speedOfSoundString, machSring );
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function results (speed, speedOfSound, mach ){
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //  +Description:
+  //            ~>  The results function takes 3 parameters and requests the document elements
+  //            ~>  associated with the output to change to these 3 parameter values. This
+  //            ~>  causes the final results from computation to be displayed in their
+  //            ~>  respective output box
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //document.getElementById("output1").innerHTML = Math.floor(speed);
+  document.getElementById("output2").innerHTML = speedOfSound;
+  document.getElementById("output3").innerHTML = mach;
+
+};
+//=======================================================================================
+
+//=======================================================================================
+//   +Description:
+//          ~>  Earth - Standard day
+//=======================================================================================
+
+//=======================================================================================
+var earth = {
+
+  rgas: 1718,     // feet^2 / seconds^2
+  gamma: 1.40     // unit-less
+
+};
+//=======================================================================================
+
+//=======================================================================================
+//  +Description:
+//        ~>   Mars - Curve fit of orbiter data
+//=======================================================================================
+
+//=======================================================================================
+var mars = {
+
+  rgas: 1149.0,   // feet^2 / seconds^2
+  gamma: 1.29     // unit-less
+
+};
+//=======================================================================================
+
+//=======================================================================================
+//  +Description:
+//          ~>  Functions that will check the range of the variable in question
+//          ~>  and set it to a new variable based on the result of the checking
+//          ~>  bounds functions
+//
+//  +Parameters: 1
+//  +Expected Output: var
+//
+//  +Contains:
+//          ->  checkAltitude()
+//          ->  checkTemperature()
+//          ->  checkSpeed()
+//          ->  checkMach()
+//=======================================================================================
+
+//=======================================================================================
+function checkAltitude ( userAltitude ){
+
+  var altitude = checkAltitudeRange ( userAltitude );
+
+    return altitude;
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function checkTemperature ( userTemperature ){
+
+  var temperature = 0;
+
+    temperature = checkTemperatureRange ( userTemperature );
+
+    return temperature;
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function checkSpeed  ( userSpeed ){
+
+  var speed = checkSpeedRange ( userSpeed );
+
+    return speed;
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function checkMach ( userMach ){
+
+  var mach = checkMachRange ( userMach );
+
+    return mach;
+
+};
+//=======================================================================================
+
+//=======================================================================================
+//  +Description:
+//          ~>  Functions that return a specific variable that is needed to
+//          ~>  help complete computation of other variables
+//  +Contains:
+//          ->  altitudeToTemperature()
+//          ->  machToSpeed()
+//          ->  speedToMach()
+//          ->  setSpeedOfSound()
+//          ->  setTemperature()
+//          ->  computeSpeedOfSound()
+//=======================================================================================
+
+//=======================================================================================
+function altitudeToTemperature ( altitude ){
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //  +Description:
+  //            ~>  Obtain a temperature in rankine units with an altitude that is either in
+  //            ~>  feet or meters. The inequalities evaluating altitude in each case statement
+  //            ~>  are only in feet so there is an if statement to convert from meters to feet
+  //            ~>  These altitude inequalities cover Earth and Mars and are obtained from
+  //            ~>  Tom Benson's original Mach and Speed of Sound Calculator Java Applet
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  var planet = userPlanet();
+  var units = userUnit();
+  var temperature;
+  var key = true;
+
+  if ( units == 1 ){
+
+    altitude = toFeet( altitude );              // If in metrics, convert to feet
+
+  }
+
+  if ( planet == 0 ){
+
+    switch ( key ){                           //  Earth
+
+        case ( altitude <= 36152. ):          //  Altitude is in feet       // Troposphere
+          temperature = 518.6 - 3.56 * ( altitude / 1000. );
+          break;
+        case ( altitude >= 36152. && altitude <= 82345. ):                  // Stratosphere
+          temperature = 389.98;
+          break;
+        case ( altitude >= 82345. && altitude <= 155348. ):
+          temperature = parseFloat( 389.98 ) + parseFloat( 1.645 ) * parseFloat( altitude - 82345. ) / 1000.;
+          break;
+        case ( altitude >= 155348. && altitude <= 175346. ):
+          temperature = 508.788;
+          break;
+        case ( altitude >= 175346. && altitude <= 262448. ):
+          temperature = 508.788 - 2.46888 * ( altitude - 175346. ) / 1000.;
+          break;
+
+        }
+
+    } else {
+
+      switch ( key ){                           //  Mars
+
+        case ( altitude <= 22960. ):
+          temperature = 434.02  - .548  * ( altitude / 1000. );
+          break;
+        case ( altitude >= 22960. ):
+          temperature = 449.36 - 1.217 * ( altitude / 1000. );
+          break;
+
+      }
+
+    }
+
+    return temperature;
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function machToSpeed ( mach, speedOfSound ){
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~> Mach = Speed / SpeedOfSound
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  return mach * speedOfSound;
+};
+//=======================================================================================
+
+//=======================================================================================
+function speedToMach ( speed, speedOfSound){
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~> Mach = Speed / SpeedOfSound
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  return speed / speedOfSound;
+};
+//=======================================================================================
+
+//=======================================================================================
+function setSpeedOfSound ( temperature ){
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //  +Description:
+  //         ~>Obtain speed of sound based on temperature and set it to respective unit
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    var units = userUnit();
+    var speedOfSound = computeSpeedOfSound( temperature );
+
+
+    if ( units == 0 ) {
+      speedOfSound = fromftPerSecToMPH ( speedOfSound );
+    }
+
+    if ( units == 1 ){
+      speedOfSound = fromftPerSecToMPH (speedOfSound) * .447;
+    }
+
+    return speedOfSound;
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function setTemperature ( temperature ){
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //  +Description:
+  //        ~>  Obtain the temperature in Rankine units and convert to either
+  //        ~>  Fahrenheit or Celsius to return it as a two digit whole number
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    var units = userUnit();
+
+    if ( units == 0 ){
+      temperature = rankineToFahrenheit ( temperature );
+    }
+
+    if ( units == 1 ){
+      temperature = rankineToCelsius ( temperature );
+    }
+
+  return  parseFloat( Math.round( temperature * 100 ) / 100 ).toFixed(2);
+
+  };
+//=======================================================================================
+
+//=======================================================================================
+function computeSpeedOfSound ( temperature ){
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  //  +Description:
+  //        ~>  Obtain the speed of sound based on the planet selected and using the Equations
+  //        ~>  speed of sound = sqrt( specific heat ratio * ideal gas constant * temperature )
+  //        ~>  Then return the computed speed of sound value for the specific planet
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      var planet = userPlanet();
+
+      var speedOfSoundEarth = Math.sqrt( parseFloat( earth.gamma ) * parseFloat( earth.rgas ) * parseFloat( temperature ) );
+      var speedOfSoundMars = Math.sqrt( parseFloat( mars.gamma ) * parseFloat( mars.rgas ) * parseFloat( temperature ) );
+
+      if ( planet == 0){
+        return speedOfSoundEarth;
+      }
+
+      if ( planet == 1){
+        return speedOfSoundMars;
+      }
+
+};
+//=======================================================================================
+
+//=======================================================================================
+//  +Description:
+//        ~>  Conversion Functions used for Imperial and Metric Units
+//  +Parameter: 1
+//  +Expected Output: Float
+//
+//  +Contains:
+//        ->  toFeet()
+//        ->  toMeters()
+//        ->  fromftPerSecToMPH()
+//        ->  fromftPerSecToMetersPerSecond()
+//        ->  rankineToFahrenheit()
+//        ->  fahrenheitToRankine()
+//        ->  celsiusToRankine()
+//        ->  rankineToCelsius()
+//
+//=======================================================================================
+
+//=======================================================================================
+function toFeet ( meters ){
+
+  return ( parseFloat( 100 / 30.48 ) * parseFloat( meters ) );
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function toMeters ( feet ){
+
+  return ( parseFloat( 30.48 / 100 ) * parseFloat( feet ) );
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function fromftPerSecToMPH ( ftPerSec ){
+
+    /* Or ( ft / s ) (3600s / 5280ft) = (mile / hour)*/
+  return ( parseFloat( 15 / 22 ) * parseFloat( ftPerSec ) );
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function fromftPerSecToMetersPerSecond ( ftPerSec ){
+
+  return ( parseFloat( 3.281 ) * parseFloat( ftPerSec ) );
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function rankineToFahrenheit ( rankine ){
+
+            /* Rankine = Fahrenheit + 459.67 */
+  return ( parseFloat( rankine ) - parseFloat( 459.67 ) );
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function fahrenheitToRankine ( fahrenheit ){
+
+            /* Rankine = Fahrenheit + 459.67 */
+  return ( parseFloat( fahrenheit ) + parseFloat( 459.67 ) );
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function celsiusToRankine ( celsius ){
+
+                    /* Rankine = Fahrenheit + 459.67 */
+  return ( ( parseFloat( 1.8 ) * parseFloat( celsius ) ) + parseFloat( 491.67 ) );
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function rankineToCelsius ( rankine ){
+
+                  /* Rankine = (1.8)(Celsius) + 491.67 */
+  return ( ( parseFloat( rankine ) - parseFloat( 491.67 ) ) / ( parseFloat( 1.8 ) ) );
+
+};
+//=======================================================================================
+
+//=======================================================================================
+//  +Description:
+//      ~>  Functions that obtain user choices by obtaining the
+//      ~>  respective html element #id-value-attribute
+//
+//  +Parameters: 0
+//  +Expected output: 0 or 1
+//
+//  +Contains:
+//        ->  userPlanet()
+//        ->  userUnit()
+//        ->  userSelection1()
+//        ->  userSelection2()
+//
+//=======================================================================================
+
+//=======================================================================================
+function userPlanet (){
+
+  var temp = document.getElementById('planet').value;
+
+  return temp;
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function userUnit (){
+
+  var temp = document.getElementById('unit').value;
+
+  return temp;
+
+};
+//=======================================================================================
+
+//=======================================================================================
+
+//=======================================================================================
+
+//=======================================================================================
+function userSelection2 (){
+
+  var temp = document.getElementById('selection2').value;
+
+  return temp;
+
+};
+//=======================================================================================
+
+//=======================================================================================
+//
+//  +Description:
+//         ~>  Functions to check the range of variables and set it to their
+//         ~>  respective range if they are out of bounds based on the unit
+//         ~>  system that the user selected.
+//         ~>  $("#element_id").val(variable) updates the input value
+//
+//  +Parameters: 1
+//  +Expected Output: temperature variable that is in RANKINE!
+//
+//  +Contains:
+//       ->   checkAltitudeRange()
+//       ->   checkTemperatureRange()
+//       ->   checkSpeedRange()
+//       ->   checkMachRange()
+//
+//=======================================================================================
+
+//=======================================================================================
+function checkAltitudeRange ( altitude ){
+
+  var units = userUnit();
+
+  if ( units == 1){
+
+     // Metric Units (meters)
+      if ( altitude < 0 ){
+        altitude = 0;
+      }
+      if ( altitude > 76200 ){
+        altitude = 76200;
+      }
+
+      $("#input1").val( altitude );
+
+        return altitude;
+
+     } else {
+
+      // Imperial Units (feet)
+      if ( altitude < 0 ){
+        altitude = 0;
+      }
+      if ( altitude > 250000 ){
+        altitude = 250000;
+      }
+
+      $("#input1").val( altitude );
+
+      return altitude;
+
+    }
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function checkTemperatureRange ( temperature ){
+
+  var units = userUnit();
+
+  if ( units == 1){
+
+     // Celsius
+      if ( temperature < -100 ){
+        temperature = -100;
+      }
+      if ( temperature > 20 ){
+        temperature = 20;
+      }
+
+      $("#input1").val( temperature );
+
+        temperature = celsiusToRankine ( temperature );
+
+        return temperature;
+
+     } else {
+
+      // Fahrenheit
+      if ( temperature < -150 ){
+        temperature = -150;
+      }
+      if ( temperature > 100 ){
+        temperature = 100;
+      }
+
+      $("#input1").val( temperature );
+
+        temperature = fahrenheitToRankine ( temperature );
+
+      return temperature;
+
+    }
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function checkSpeedRange ( speed ){
+
+  var units = userUnit();
+  if ( units == 1){
+
+     // Metric Units  (meters/second)
+    if ( speed < 0 ){
+      speed = 0;
+    }
+    if ( speed > 7867 ){
+      speed = 7867;
+    }
+
+      $("#input2").val( speed );
+
+      return speed;
+
+   } else {
+
+    // Imperial Units  (feet/second)
+    if ( speed < 0 ){
+      speed = 0;
+    }
+    if ( speed > 17600 ){
+      speed = 17600;
+    }
+
+      $("#input2").val( speed );
+
+      return speed;
+
+  }
+
+};
+//=======================================================================================
+
+//=======================================================================================
+function checkMachRange ( mach ){
+
+  if ( mach < 0 ){
+    mach = 0;
+  }
+  if ( mach > 25 ){
+    mach = 25;
+  }
+
+    $("#input2").val( mach );
+
+    return mach;
+
+};
+//=======================================================================================
